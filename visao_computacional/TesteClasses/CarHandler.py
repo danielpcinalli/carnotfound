@@ -28,6 +28,7 @@
 import sys
 import time
 import RPi.GPIO as GPIO
+from constants import *
 #import pigpio as HGPIO
 
 class CarHandler():
@@ -92,3 +93,44 @@ class CarHandler():
 
 	def cleanupPins(self):
 		GPIO.cleanup()
+
+	def rotinaDeTestes(self):
+		print("Executando rotina de teste dos motores.")
+
+		self.setAngle(90)
+		time.sleep(10) # Espera 10 segundoa antes de sair andando para dar tempo de eu sair lá fora
+		self.forward()
+		time.sleep(2)
+		self.setAngle(60)
+		time.sleep(2)
+		self.setAngle(90)
+		time.sleep(2)
+		self.setAngle(115)
+		time.sleep(2)
+		self.setAngle(90)
+		time.sleep(2)
+		self.stop()
+		time.sleep(2)
+		self.backward()
+		time.sleep(2)
+		self.neutral()
+		
+		print("Fom da rotina de teste dos motores.")
+		time.sleep(0.5)
+		
+	def tomadaDeDecisao(self,Direcao, QtdeLinhas):
+		if (QtdeLinhas == 0):
+			print("PARE")
+			self.stop();
+		else:
+			self.forward();
+			if (Direcao > 0):
+				print("DIREITA")
+				self.setAngle(115)
+			if (Direcao < 0):
+				print("ESQUERDA")
+				self.setAngle(75)
+			if (Direcao == 0):
+				print("EM FRENTE")
+				self.setAngle(90)
+

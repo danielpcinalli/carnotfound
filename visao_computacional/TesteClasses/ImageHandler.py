@@ -18,12 +18,11 @@
 import cv2
 import numpy as np
 import time
+from constants import *
 
 class ImageHandler():
 
 	def tratarImagem(self, img):
-		LimiarBinarizacao = 125
-		AreaContornoLimiteMin = 5000
 
 		#obtencao das dimensoes da imagem
 		height = np.size(img, 0)
@@ -33,14 +32,14 @@ class ImageHandler():
 		print("Dimensões da imagem obtidas")
 		
 		#tratamento da imagem
-		gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-		gray = cv2.GaussianBlur(gray, (21, 21), 0)
-		FrameBinarizado = cv2.threshold(gray, LimiarBinarizacao, 255, cv2.THRESH_BINARY_INV)[1]
-		FrameBinarizado = cv2.dilate(FrameBinarizado, None, iterations=2)
-		FrameBinarizado = cv2.bitwise_not(FrameBinarizado)
+		img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+		img = cv2.GaussianBlur(img, KERNEL_GAUSSIAN_BLUR, 0)
+		img = cv2.threshold(img, LimiarBinarizacao, 255, cv2.THRESH_BINARY_INV)[1]
+		img = cv2.dilate(img, None, iterations=QUANTIDADE_ITERACOES_DILATE)
+		img = cv2.bitwise_not(img)
 		#print("Tratamento 1 completo")
 
-		_, cnts, _ = cv2.findContours(FrameBinarizado.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+		_, cnts, _ = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 		cv2.drawContours(img, cnts, -1, (255,0,255), 3)
 		#print("Tratamento 2 completo")
 		
